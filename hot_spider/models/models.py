@@ -3,10 +3,11 @@ from peewee import *
 from playhouse.pool import PooledMySQLDatabase
 
 conf = configparser.ConfigParser()
-conf.read('.\conf\conf.ini', encoding='UTF-8')
+conf.read('../conf/conf.ini', encoding="UTF-8")
 user = conf.get('db', 'user')
 passwd = conf.get('db', 'passwd')
-db = PooledMySQLDatabase('hotnews', max_connections=100, stale_timeout=300, user=user, passwd='199511')
+
+db = PooledMySQLDatabase('hotnews', max_connections=100, stale_timeout=300, user=user, passwd=passwd)
 
 
 class BaseModel(Model):
@@ -38,7 +39,3 @@ class TimeRank(BaseModel):
     hot_id = BigIntegerField()
     count = IntegerField()
 
-
-if __name__ == '__main__':
-    print(user)
-    print(passwd)

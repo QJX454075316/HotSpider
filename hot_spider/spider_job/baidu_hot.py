@@ -40,34 +40,29 @@ def pase_one_page(html):
         }
 
 
-def write_to_database(content):
-    for item in content:
-        hot, created = HotSearch.get_or_create(title=item['title'],
-                                               defaults={'type': 0, 'url': item['url'],
-                                                         'describe': '', 'new_url': item['new_url'],
-                                                         'image_url': item['image_url'], 'video_url': item['video_url']})
+def write_to_database(item):
+    hot, created = HotSearch.get_or_create(title=item['title'],
+                                           defaults={'type': 0, 'url': item['url'],
+                                                     'describe': '', 'new_url': item['new_url'],
+                                                     'image_url': item['image_url'], 'video_url': item['video_url']})
 
-        # hot = HotSearch(title=item['title'], url=item['url'], type=0,
-        #                 describe='', new_url=item['new_url'],
-        #                 video_url=item['video_url'], image_url=item['image_url'])
-        hot.save()
-        rank = TimeRank(time=get_time(), ranking=item['ranking'],
-                        hot_id=hot.id, count=item['count'])
-        rank.save()
-
+    # hot = HotSearch(title=item['title'], url=item['url'], type=0,
+    #                 describe='', new_url=item['new_url'],
+    #                 video_url=item['video_url'], image_url=item['image_url'])
+    hot.save()
+    rank = TimeRank(time=get_time(), ranking=item['ranking'],
+                    hot_id=hot.id, count=item['count'])
+    rank.save()
 
 
 
 
-def main():
+
+def baidu_main_job():
     url = 'http://top.baidu.com/buzz?b=1&fr=20811'
     html = get_one_bage(url)
-    items = []
     for item in pase_one_page(html):
-        items.append(item)
-    write_to_database(items)
+        write_to_database(item)
 
 
 
-if __name__ == '__main__':
-    main()
